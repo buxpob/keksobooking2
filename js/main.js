@@ -96,5 +96,3 @@ const createAd = function () {
 };
 
 const arrayAds = new Array(AD_COUNT).fill(null).map(() => createAd());
-
-console.log(arrayAds);
