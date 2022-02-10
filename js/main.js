@@ -1,4 +1,9 @@
-import './card.js';
-import './form.js';
-import './map.js';
+/* global _:readonly */
 
+import { setUserFormSubmit, getFormSubmit } from './form-hundler.js';
+import { addMap } from './map.js';
+import './avatar.js';
+
+addMap();
+getFormSubmit();
+setUserFormSubmit();

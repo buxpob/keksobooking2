@@ -1,6 +1,5 @@
 import { getRandomInt, getRandomIntFixedPoint, getRandomArrayElement, getRandomArrayLength } from './util.js';
 
-const AD_COUNT = 10;
 const TYPE_HOUSING = ['palace', 'flat', 'house', 'bungalow'];
 const TIME = ['12:00', '13:00', '14:00'];
 const FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
@@ -51,6 +50,3 @@ const createAd = function () {
   }
 };
 
-const getArrayAds = () => new Array(AD_COUNT).fill(null).map(() => createAd());
-
-export { getArrayAds };

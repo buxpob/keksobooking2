@@ -1,4 +1,6 @@
-const getRandomInt = (min, max) => {
+const ALERT_SHOW_TIME = 5000;
+
+export const getRandomInt = (min, max) => {
   if (min < 0 || min >= max) {
     return -1;
   }
@@ -6,7 +8,7 @@ const getRandomInt = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-const getRandomIntFixedPoint = function (min, max, number) {
+export const getRandomIntFixedPoint = function (min, max, number) {
   if (min < 0 || min >= max) {
     return -1;
   }
@@ -14,11 +16,11 @@ const getRandomIntFixedPoint = function (min, max, number) {
   return ((Math.random() * (max - min + 1)) + min).toFixed(number);
 };
 
-const getRandomArrayElement = function (array) {
+export const getRandomArrayElement = function (array) {
   return array[getRandomInt(0, array.length - 1)];
 };
 
-const shuffleArray = function (array) {
+export const shuffleArray = function (array) {
   let rundomItem;
   let temp;
 
@@ -32,7 +34,7 @@ const shuffleArray = function (array) {
   return array;
 };
 
-const getRandomArrayLength = function (array) {
+export const getRandomArrayLength = function (array) {
   let newArray = shuffleArray(array);
   let randomArray = [];
   let randomArrayLength = getRandomInt(1, array.length - 1);
@@ -43,7 +45,7 @@ const getRandomArrayLength = function (array) {
   return randomArray;
 };
 
-const addDisabledCondition = function (el, attributeName) {
+export const addDisabledCondition = function (el, attributeName) {
   el.classList.add('ad-form--disabled');
   const itemList = document.querySelectorAll(`${attributeName}`);
   itemList.forEach((item) => {
@@ -51,7 +53,7 @@ const addDisabledCondition = function (el, attributeName) {
   });
 };
 
-const removeDisabledCondition = function (el, attributeName) {
+export const removeDisabledCondition = function (el, attributeName) {
   el.classList.remove('ad-form--disabled');
   const itemList = document.querySelectorAll(`${attributeName}`);
   itemList.forEach((item) => {
@@ -59,12 +61,52 @@ const removeDisabledCondition = function (el, attributeName) {
   });
 };
 
+export const showAlert = (message) => {
+  const alertContainer = document.createElement('div');
+  alertContainer.style.zIndex = 999;
+  alertContainer.style.position = 'fixed';
+  alertContainer.style.left = 0;
+  alertContainer.style.top = 0;
+  alertContainer.style.right = 0;
+  alertContainer.style.padding = '28px 3px';
+  alertContainer.style.fontSize = '30px';
+  alertContainer.style.textAlign = 'center';
+  alertContainer.style.backgroundColor = 'red';
 
-export {
-  getRandomInt,
-  getRandomIntFixedPoint,
-  getRandomArrayElement,
-  getRandomArrayLength,
-  addDisabledCondition,
-  removeDisabledCondition
-};
+  alertContainer.textContent = `${message}`;
+
+  document.body.append(alertContainer);
+
+  setTimeout(() => {
+    alertContainer.remove();
+  }, ALERT_SHOW_TIME);
+}
+
+export const showPopup = (className, classNameButton = null) => {
+  const popupTemplateInfo = document.querySelector(`#${className}`).content.querySelector(`.${className}`);
+  const popupTemplate = popupTemplateInfo.cloneNode(true);
+  const main = document.querySelector('main');
+  popupTemplate.style.zIndex = 999;
+  main.append(popupTemplate);
+  popupTemplate.style.display = 'block';
+
+  document.addEventListener('keydown', (evt) => {
+    if (evt.key === 'Esc' || evt.key === 'Escape') {
+      popupTemplate.style.display = 'none';
+    }
+  })
+
+  window.addEventListener('click', (evt) => {
+    if (evt.target == popupTemplate) {
+      popupTemplate.style.display = 'none';
+    }
+  })
+
+  if (classNameButton != null) {
+    const buttonClose = popupTemplate.querySelector(`.${classNameButton}`);
+    buttonClose.addEventListener('click', () => {
+      popupTemplate.style.display = 'none';
+    })
+  }
+}
+
