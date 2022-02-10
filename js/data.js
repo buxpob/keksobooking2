@@ -42,7 +42,7 @@ const createLocationAd = function () {
   };
 };
 
-const createAd = function () {
+export const createAd = function () {
   return {
     author: createAuthorAd(),
     offer: createOfferAd(),

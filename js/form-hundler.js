@@ -1,3 +1,5 @@
+/* global _:readonly */
+
 import { getData, sendData } from './api.js';
 import { createPopups } from './popup.js';
 import { showAlert, showPopup } from './util.js';

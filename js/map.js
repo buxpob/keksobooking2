@@ -1,3 +1,5 @@
+/* global L:readonly */
+
 import { removeDisabledCondition, addDisabledCondition } from './util.js';
 
 const mapCanvas = document.querySelector('#map-canvas');
