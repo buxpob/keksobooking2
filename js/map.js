@@ -1,22 +1,24 @@
-import { removeDisabledCondition } from './util.js';
-import { arrayAds, createCard } from './card.js';
+import { removeDisabledCondition, addDisabledCondition } from './util.js';
 
 const mapCanvas = document.querySelector('#map-canvas');
 const mapFilterForm = document.querySelector('.map__filters');
 const adForm = document.querySelector('.ad-form');
-const address = adForm.querySelector('#address');
+
+addDisabledCondition(mapFilterForm, ['select', 'fieldset']);
+addDisabledCondition(adForm, ['fieldset']);
 
 const Coordinates = {
-  lat: 35.68950,
-  lng: 139.69171,
+  lat: 35.67500,
+  lng: 139.75000,
 };
 
-const mapConnect = function () {
-  const map = L.map(mapCanvas)
-    .on('load', () => {
-      removeDisabledCondition(mapFilterForm, ['select', 'fieldset']);
-      removeDisabledCondition(adForm, ['fieldset']);
-    })
+const map = L.map(mapCanvas)
+
+export const mapConnect = function () {
+  map.on('load', () => {
+    removeDisabledCondition(mapFilterForm, ['select', 'fieldset']);
+    removeDisabledCondition(adForm, ['fieldset']);
+  })
     .setView({
       lat: Coordinates.lat,
       lng: Coordinates.lng,
@@ -28,28 +30,12 @@ const mapConnect = function () {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     },
   ).addTo(map);
+}
 
-  arrayAds.forEach((item) => {
-    const pinIcon = L.icon({
-      iconUrl: './img/pin.svg',
-      iconSize: [40, 40],
-      iconAnchor: [20, 40],
-    });
+const mainPinMarkerLayer = L.layerGroup();
+export const addMainPinMarker = function () {
 
-    const marker = L.marker(
-      {
-        lat: item.location.x,
-        lng: item.location.y,
-      },
-      {
-        icon: pinIcon,
-      },
-    );
-
-    marker
-      .addTo(map)
-      .bindPopup(createCard(item));
-  });
+  mainPinMarkerLayer.clearLayers();
 
   const mainPinIcon = L.icon({
     iconUrl: './img/main-pin.svg',
@@ -68,13 +54,55 @@ const mapConnect = function () {
     },
   );
 
-  mainMarker.addTo(map);
+  let address = document.querySelector('#address');
+  const mapCoordinatesStart = `${mainMarker._latlng.lat}, ${mainMarker._latlng.lng}`;
+  address.value = mapCoordinatesStart;
 
-  address.value = `${Coordinates.lat}, ${Coordinates.lng}`
+  mainPinMarkerLayer.addLayer(mainMarker);
+  mainPinMarkerLayer.addTo(map);
+
   mainMarker.on('moveend', (evt) => {
-    const currentAddress = evt.target.getLatLng();
-    address.value = `${currentAddress.lat}, ${currentAddress.lng}`;
+    const lat = evt.target.getLatLng().lat.toFixed(5);
+    const lng = evt.target.getLatLng().lng.toFixed(5);
+    address.value = `${lat}, ${lng}`;
   });
+
+
 };
 
-mapConnect();
+
+const listMarkers = L.layerGroup();
+export const addAdsPinMarker = function (arr, listPopups) {
+
+  listMarkers.clearLayers();
+
+  arr.forEach((item, index) => {
+    const popup = listPopups[index];
+    const pinIcon = L.icon({
+      iconUrl: './img/pin.svg',
+      iconSize: [40, 40],
+      iconAnchor: [20, 40],
+    });
+
+    const adPinMarker = L.marker(
+      {
+        lat: item.location.lat,
+        lng: item.location.lng,
+      },
+      {
+        icon: pinIcon,
+      },
+    );
+
+    adPinMarker.bindPopup(popup)
+    listMarkers.addLayer(adPinMarker);
+  });
+
+  listMarkers.addTo(map);
+}
+
+export const addMap = () => {
+  mapConnect();
+  addMainPinMarker();
+}
+
