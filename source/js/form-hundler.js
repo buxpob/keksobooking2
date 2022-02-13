@@ -11,12 +11,12 @@ const RERENDER_DELAY = 500;
 export const getFormSubmit = () => {
   getData((ads) => {
     createPopups(ads);
-    changeTypeItemForm(_.debounce(
-      () => createPopups(ads),
+    changeTypeItemForm(
+      _.throttle(() => createPopups(ads)),
       RERENDER_DELAY,
-    ))
+    );
   }, showAlert);
-}
+};
 
 export const setUserFormSubmit = () => {
   adForm.addEventListener('submit', (evt) => {
@@ -26,11 +26,11 @@ export const setUserFormSubmit = () => {
       new FormData(evt.target),
       () => {
         showPopup('success');
-        formReset()
+        formReset();
       },
       () => {
-        showPopup('error', 'error__button')
+        showPopup('error', 'error__button');
       },
     );
-  })
-}
+  });
+};
