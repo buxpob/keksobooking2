@@ -1,5 +1,5 @@
-/* global L:readonly */
-
+import  * as L  from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 import { removeDisabledCondition, addDisabledCondition } from './util.js';
 
 const mapCanvas = document.querySelector('#map-canvas');
