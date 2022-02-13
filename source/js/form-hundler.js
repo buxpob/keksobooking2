@@ -1,4 +1,4 @@
-/* global _:readonly */
+import _ from 'lodash';
 
 import { getData, sendData } from './api.js';
 import { createPopups } from './popup.js';

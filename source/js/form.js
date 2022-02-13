@@ -1,5 +1,5 @@
-import { addMainPinMarker } from './map.js';
 import { getFormSubmit } from './form-hundler.js';
+import { addMainPinMarker } from './map.js';
 
 
 const Price = {
